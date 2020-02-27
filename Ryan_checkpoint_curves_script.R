@@ -123,7 +123,7 @@ this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
 newpts <- abind::abind(newpts, this.curve, along=1)
 
 
-
+#Need to do the following to change missing data 
 subsampled.lm <- newpts 
 
 subsampled.lm[which(subsampled.lm==9999)]<-NA
