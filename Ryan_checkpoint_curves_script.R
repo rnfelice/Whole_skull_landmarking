@@ -10,7 +10,7 @@ library(qgraph)
 library(ape)
 library(geiger)
 library(abind)
-load the script for resampling functions
+#load the script for resampling functions
 source("R:/Ellen/WHOLE skull analyses/pts/resamplingsV3.R")
 
 #curvedata must be a csv with columns 'lm1' 'lm2' and 'ptswanted'
@@ -18,6 +18,7 @@ curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv")
 
 #set the working directory
 setwd("R:/Ellen/WHOLE skull analyses/pts")
+
 
 #list which landmarks are fixed and will not slide
 
@@ -27,22 +28,22 @@ ptslist <- dir(pattern='.pts', recursive=F)
 pts_tibble <- as_tibble()#initialize an empty tibble to store the pts data
 filenames <- ptslist
 ntaxa <- length(filenames) #define the number of taxa based on how many pts files are in the working directory
-
+
 #define the curves using the 'curvedata' object
 subsampled.curve<-sapply(paste("SC",c(1:nrow(curvedata)),sep=""),function(x) NULL)
 subsampled.curve[[1]]<-c(curvedata$lm1[1],((length(fixed)+1):(length(fixed)+curvedata$ptswanted[1])),curvedata$lm2[1])
 for (i in 2:length(subsampled.curve)){
   subsampled.curve[[i]]<-c(curvedata$lm1[i],((max(unlist(subsampled.curve))+1):(max(unlist(subsampled.curve))+curvedata$ptswanted[i])),curvedata$lm2[i])
 }
-
+
 subsampled.curve.in<-subsampled.curve
 for(i in 1:length(subsampled.curve.in)){
   subsampled.curve.in[[i]]<-tail(head(subsampled.curve[[i]],-1),-1)
 }
-
-
+
+
 slidings.sub<-c((max(fixed)+1):max(unlist(subsampled.curve)))
-
+
 ## IMPORT DATA ##
 {
   for(i in 1:length(ptslist))
@@ -59,17 +60,34 @@ slidings.sub<-c((max(fixed)+1):max(unlist(subsampled.curve)))
     rename(., index = V1, X = V2, Y = V3, Z = V4) #rename the coordinate data columns
   print("SERIOUSLY DONT WORRY ABOUT THE WARNINGS BELOW")
 }
-
+
 #make a list of how many sliding semilandmarks on curves there are
 curvepoints <- sum(curvedata$ptswanted)
 #convert the tibble to a 3D array compatable with geomorph
 pts_tibble_tmp <- pts_tibble%>%filter(.,class=="S")%>%group_by(spec.id)%>%select(.,X,Y,Z)%>%nest()%>%transpose()
 ptsarray_tmp <- array(dim=c(length(fixed),3,ntaxa))
-
+
 for(i in 1:length(pts_tibble_tmp))
 {
   ptsarray_tmp[,,i] <- as.matrix(select(pts_tibble_tmp[[i]]$data, c(X,Y,Z)))
 }
+
+
+
+
+#Check which curves are wrong 
+check_curves <- function(tibble1){
+  uniques <- tibble1 %>% group_by(spec.id) %>% filter(class == "C") %>% summarise(Unique_Elements = n_distinct(id))
+  max_curves <- max(uniques$Unique_Elements)
+  too_few <- which(uniques$Unique_Elements != max_curves)
+  for (i in 1:length(too_few)){
+    name <- uniques$spec.id[too_few[i]]
+    present <- pts_tibble %>% group_by(spec.id) %>% filter(class == "C") %>% filter(spec.id == name) %>% distinct(id) %>% pull(id) %>% as.vector()
+    absent <- setdiff(as.character(1:max_curves), present)
+    writeLines(paste(name, "is missing curve number", absent))
+  }
+}
+check_curves(pts_tibble)
 
 
 
@@ -82,13 +100,13 @@ newpts <- array(data = NA, dim = c(length(fixed),3,ntaxa))
 dimnames(newpts)[3] <- list(substr(filenames,1,(nchar(filenames)-4)))
 #fill in the fixed landmarks 
 newpts[fixed,,] <- ptsarray_tmp
-
+
 #OPTIONAL:
 #check for outliers in your anatomical landmarks before subsampling
 #find.outliers(newpts)
-
-
-
+
+
+
 for (which.curve in 1:nrow(curvedata)){
   this.curve <- array(data=NA, dim=c(curvedata$ptswanted[which.curve],3,ntaxa))
   for (which.spec in 1:length(filenames)){
@@ -100,30 +118,16 @@ for (which.curve in 1:nrow(curvedata)){
   }
   newpts <- abind::abind(newpts, this.curve, along=1)
 }
+
 
-which.curve
+#which.curve
+
+#class(as.integer(sprintf('%0.3d', 1:480)))
+#class(which.curve)
+
+#which.curve2=sprintf('%0.3d', 1:480)
+#which.curve2[1]
 
-class(as.integer(sprintf('%0.3d', 1:480)))
-class(which.curve)
-
-which.curve2=sprintf('%0.3d', 1:480)
-which.curve2[1]
-
-### trial for one spec one curve- can ignore ### 
-which.curve=2
-this.curve <- array(data=NA, dim=c(curvedata$ptswanted[which.curve],3,ntaxa))
-
-which.spec=1
-
-orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
-orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
-orig.curve <- rbind(orig.curve.anchors[1,],orig.curve,orig.curve.anchors[2,])
-new.curve <- cursub.interpo(orig.curve, curvedata$ptswanted[which.curve])
-this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
-newpts <- abind::abind(newpts, this.curve, along=1)
-
-
-#Need to do the following to change missing data 
 subsampled.lm <- newpts 
 
 subsampled.lm[which(subsampled.lm==9999)]<-NA
@@ -135,4 +139,35 @@ estimate.missing(subsampled.lm,method="TPS")
 subsampled.lm2<-abind(subsampled.lm[,,2],subsampled.lm)
 newnewpts<-estimate.missing(subsampled.lm2)
 
-spheres3d(newnewpts[,,4])
+spheres3d(newnewpts[,,32])
+
+#orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
+#orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
+#orig.curve <- rbind(orig.curve.anchors[1,],orig.curve,orig.curve.anchors[2,])
+#new.curve <- cursub.interpo(orig.curve, curvedata$ptswanted[which.curve])
+#this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
+#newpts <- abind::abind(newpts, this.curve, along=1)
+
+
+#Check which curves are wrong 
+check_curves <- function(tibble1){
+  uniques <- tibble1 %>% group_by(spec.id) %>% filter(class == "C") %>% summarise(Unique_Elements = n_distinct(id))
+  max_curves <- max(uniques$Unique_Elements)
+  too_few <- which(uniques$Unique_Elements != max_curves)
+  for (i in 1:length(too_few)){
+    name <- uniques$spec.id[too_few[i]]
+    present <- pts_tibble %>% group_by(spec.id) %>% filter(class == "C") %>% filter(spec.id == name) %>% distinct(id) %>% pull(id) %>% as.vector()
+    absent <- setdiff(as.character(1:max_curves), present)
+    writeLines(paste(name, "is missing curve number", absent))
+  }
+}
+check_curves(pts_tibble)
+
+
+#This is for checking the lengths of files to see if they are the same 
+files <- list.files( path = "R:/Ellen/WHOLE skull analyses/pts/pts", pattern = ".pts" )
+
+for ( i in seq(1:length(files)) ){
+cat( "Lines for file ", files[i], "are: ", "\n" )
+cat( length(readLines( paste( files[i], sep = "" )) ), "\n" )
+}
