@@ -74,23 +74,6 @@ for(i in 1:length(pts_tibble_tmp))
 
 
 
-
-#Check which curves are wrong 
-check_curves <- function(tibble1){
-  uniques <- tibble1 %>% group_by(spec.id) %>% filter(class == "C") %>% summarise(Unique_Elements = n_distinct(id))
-  max_curves <- max(uniques$Unique_Elements)
-  too_few <- which(uniques$Unique_Elements != max_curves)
-  for (i in 1:length(too_few)){
-    name <- uniques$spec.id[too_few[i]]
-    present <- pts_tibble %>% group_by(spec.id) %>% filter(class == "C") %>% filter(spec.id == name) %>% distinct(id) %>% pull(id) %>% as.vector()
-    absent <- setdiff(as.character(1:max_curves), present)
-    writeLines(paste(name, "is missing curve number", absent))
-  }
-}
-check_curves(pts_tibble)
-
-
-
 ##############################################################
 ####making all the curves have the correct number of landmarks
 ##############################################################
@@ -120,13 +103,48 @@ for (which.curve in 1:nrow(curvedata)){
 }
 
 
+
+#########################################
+#                                       #
+#    CHECK WHICH CURVES ARE WRONG       #
+#                                       #
+#########################################
+
+
+check_curves <- function(tibble1){
+  uniques <- tibble1 %>% group_by(spec.id) %>% filter(class == "C") %>% summarise(Unique_Elements = n_distinct(id))
+  max_curves <- max(uniques$Unique_Elements)
+  too_few <- which(uniques$Unique_Elements != max_curves)
+  if (length(too_few)==0){
+    writeLines("You have no missing curves! Great job!") 
+  }
+  else{
+    for (i in 1:length(too_few)){
+      name <- uniques$spec.id[too_few[i]]
+      present <- pts_tibble %>% group_by(spec.id) %>% filter(class == "C") %>% filter(spec.id == name) %>% distinct(id) %>% pull(id) %>% as.vector()
+      absent <- setdiff(as.character(1:max_curves), present)
+      writeLines(paste(name, "is missing curve number", absent))
+    }
+  }
+}
+
+
 #which.curve
+
 
 #class(as.integer(sprintf('%0.3d', 1:480)))
 #class(which.curve)
 
 #which.curve2=sprintf('%0.3d', 1:480)
 #which.curve2[1]
+
+
+##############################
+#                            #  
+#      MISSING DATA          #
+#                            #
+##############################
+
 
 subsampled.lm <- newpts 
 
@@ -139,7 +157,7 @@ estimate.missing(subsampled.lm,method="TPS")
 subsampled.lm2<-abind(subsampled.lm[,,2],subsampled.lm)
 newnewpts<-estimate.missing(subsampled.lm2)
 
-spheres3d(newnewpts[,,32])
+spheres3d(newnewpts[,,110], radius = 2)
 
 #orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
 #orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
@@ -147,21 +165,6 @@ spheres3d(newnewpts[,,32])
 #new.curve <- cursub.interpo(orig.curve, curvedata$ptswanted[which.curve])
 #this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
 #newpts <- abind::abind(newpts, this.curve, along=1)
-
-
-#Check which curves are wrong 
-check_curves <- function(tibble1){
-  uniques <- tibble1 %>% group_by(spec.id) %>% filter(class == "C") %>% summarise(Unique_Elements = n_distinct(id))
-  max_curves <- max(uniques$Unique_Elements)
-  too_few <- which(uniques$Unique_Elements != max_curves)
-  for (i in 1:length(too_few)){
-    name <- uniques$spec.id[too_few[i]]
-    present <- pts_tibble %>% group_by(spec.id) %>% filter(class == "C") %>% filter(spec.id == name) %>% distinct(id) %>% pull(id) %>% as.vector()
-    absent <- setdiff(as.character(1:max_curves), present)
-    writeLines(paste(name, "is missing curve number", absent))
-  }
-}
-check_curves(pts_tibble)
 
 
 #This is for checking the lengths of files to see if they are the same 
