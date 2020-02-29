@@ -13,7 +13,8 @@ library(abind)
 #load the script for resampling functions
 source("R:/Ellen/WHOLE skull analyses/pts/resamplingsV3.R")
 
-#curvedata must be a csv with columns 'lm1' 'lm2' and 'ptswanted'
+#curvedata must be a csv with columns 'curves' 'lm1' 'lm2' and 'ptswanted'
+#If you get Unicode UTF-8 BOM (ï..) then use curvedata<-read.csv('new curves.csv',fileEncoding="UTF-8-BOM")
 curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv")
 
 #set the working directory
