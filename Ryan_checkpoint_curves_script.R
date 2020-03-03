@@ -157,8 +157,11 @@ estimate.missing(subsampled.lm,method="TPS")
 
 subsampled.lm2<-abind(subsampled.lm[,,2],subsampled.lm)
 newnewpts<-estimate.missing(subsampled.lm2)
+                         
+#Remove the extra specimen added by subsampled 
+pts187 <- newnewpts[,,-c(1)]                
 
-spheres3d(newnewpts[,,110], radius = 2)
+spheres3d(pts187[,,110], radius = 2)
 
 #orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
 #orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
