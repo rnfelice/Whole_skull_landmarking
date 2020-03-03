@@ -170,11 +170,15 @@ spheres3d(pts187[,,110], radius = 2)
 #this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
 #newpts <- abind::abind(newpts, this.curve, along=1)
 
-
-#This is for checking the lengths of files to see if they are the same 
-files <- list.files( path = "R:/Ellen/WHOLE skull analyses/pts/pts", pattern = ".pts" )
-
-for ( i in seq(1:length(files)) ){
-cat( "Lines for file ", files[i], "are: ", "\n" )
-cat( length(readLines( paste( files[i], sep = "" )) ), "\n" )
-}
+                         
+#Checking what goes wrong 
+#Load single pts 
+file=as.matrix(read.table(file="F:/PTS FINAL LHS/missing data test/Agorophiid USNM 205491.pts",skip=2,header=F,sep="",row.names=1))
+#Show numbers on the landmarks (this is landmarks 1:123)
+text3d(ptsbatch1[c(1:123),,2], text=1:123)
+#This is how the data look before estimate.missing 
+subsampled.lm[,,2] # should have NAs for missing data 
+#This is how it looks after estimate.missing 
+ptsbatch1[,,2]
+                         
+                         
