@@ -46,7 +46,7 @@ library(Morpho)
 library(rgl)
 
 
-#don't forget .pl
+#don't forget .ply ata the end of the file path 
 
 Lissodelphis=ply2mesh(file="D:/Checkpoint - ICVM/Asymmetry project/AB/ply/Lissodelphis borealis USNM 550188.ply")
 
