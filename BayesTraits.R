@@ -11,3 +11,7 @@ write.table(LHS95_pPCA*1000,
 
 
 write.nexus(treeSVP, file = 'treeSVP.nexus')
+
+
+#Now put the tree and the txt file in one folder
+#Also add: bayes_traits_script, BayesTraitsV3, Script_BM, ScriptBM2
