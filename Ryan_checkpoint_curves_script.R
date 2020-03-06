@@ -15,7 +15,7 @@ source("R:/Ellen/WHOLE skull analyses/pts/resamplingsV3.R")
 
 #curvedata must be a csv with columns 'curves' 'lm1' 'lm2' and 'ptswanted'
 #If you get Unicode UTF-8 BOM (ï..) then use curvedata<-read.csv('new curves.csv',fileEncoding="UTF-8-BOM")
-curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv")
+curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv, fileEncoding="UTF-8-BOM")
 
 #set the working directory
 setwd("R:/Ellen/WHOLE skull analyses/pts")
