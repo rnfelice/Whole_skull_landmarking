@@ -187,7 +187,7 @@ newnewpts<-estimate.missing(subsampled.lm2)
 #Remove the extra specimen added by subsampled 
 ptsbatch <- newnewpts[,,-c(1)]
 
-spheres3d(ptsbatch[,,4], radius = 2)
+spheres3d(ptsbatch[,,156], radius = 2)
 
 
 save(ptsbatch, file="F:/PTS FINAL LHS/ptsbatch.R")
@@ -210,8 +210,6 @@ for ( i in seq(1:length(files)) ){
 }
 
 
-
-
 #Checking what goes wrong 
 #Load single pts 
 file=as.matrix(read.table(file="F:/PTS FINAL LHS/missing data test/Agorophiid USNM 205491.pts",skip=2,header=F,sep="",row.names=1))
@@ -221,4 +219,3 @@ text3d(ptsbatch1[c(1:123),,2], text=1:123)
 subsampled.lm[,,2] # should have NAs for missing data 
 #This is how it looks after estimate.missing 
 ptsbatch1[,,2]
-
