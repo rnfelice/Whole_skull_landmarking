@@ -98,7 +98,7 @@ shapedataRHS=data[c(67:123, 1079:2033),,]
 
 spheres3d(shapedataRHS[,,1], radius = 0.0001)
 col=rainbow(length(1:dim(shapedataRHS)[1]))
-shapes3d(shapedataRHS[,,1], joinline=c(1:dim(shapedataRHS)[1]), color=col)
+shapes3d(shapedataRHS[,,1], color=col)
 
 #Check the new shape data alignment 
 spheres3d(shapedata[,,1], radius = 0.0001)
