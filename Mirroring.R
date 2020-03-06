@@ -1,5 +1,4 @@
 
-
 ###################################
 #                                 #
 #      MIRRORING LANDMARKS        #
@@ -12,6 +11,7 @@
 #Data are ptsbatch 
 #None of the lms are mirrored - just the curve data 
 
+################################### SWAP REAL LHS LMS FOR MIRRORED ONES FOR PROCRUSTES
 ActualLMs=ptsbatch[1:123,,] ## 53 landmarks, but 3 of these are midline, so total LMs will be 53+50
 ActualLMsmatrix=as.matrix(ActualLMs)
 midline<-as.integer(c(38,40,48,49,51,54,55,56,61))
@@ -76,7 +76,7 @@ dimnames(newarray)[3]<-dimnames(ptsbatch)[3]
 spheres3d(newarray[c(67:123),,1], radius=2, color="red")
 spheres3d(newarray[c(1079:2033),,1], radius=2)
 dim(newarray)
-              
+
               
 ###################################
 #                                 #
@@ -92,13 +92,18 @@ size=Y.gpa$Csize
 
 shapedata=data[c(1:66, 124:1078),,]
 
-spheres3d(shapedata[,,1], radius = 0.0001)
+#This is procrustes so the radius is tiny 
+spheres3d(shapedata[,,44], radius = 0.0001)
 
+#define what the RHS data are 
 shapedataRHS=data[c(67:123, 1079:2033),,]
 
-spheres3d(shapedataRHS[,,1], radius = 0.0001)
+spheres3d(shapedataRHS[,,44], radius = 0.0001, color = "red")
+text3d(shapedataRHS[,,4], text=1:dim(mirrordata)[1])
+
+
 col=rainbow(length(1:dim(shapedataRHS)[1]))
-shapes3d(shapedataRHS[,,1], color=col)
+shapes3d(shapedataRHS[,,4], joinline=c(1:dim(shapedataRHS)[1]), color=col)
 
 #Check the new shape data alignment 
 spheres3d(shapedata[,,1], radius = 0.0001)
@@ -118,16 +123,6 @@ spheres3d(data[,,1], color=col, radius = 0.001)
 
 
 spheres3d(newarray[,,1], color=col, radius = 1)
-            
-              
-              
-              
-              
-              
-              
-              
-              
-              
               
               
               
