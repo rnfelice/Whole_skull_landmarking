@@ -15,11 +15,10 @@ source("R:/Ellen/WHOLE skull analyses/pts/resamplingsV3.R")
 
 #curvedata must be a csv with columns 'curves' 'lm1' 'lm2' and 'ptswanted'
 #If you get Unicode UTF-8 BOM (ï..) then use curvedata<-read.csv('new curves.csv',fileEncoding="UTF-8-BOM")
-curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv, fileEncoding="UTF-8-BOM")
+curvedata<-read_csv("R:/Ellen/WHOLE skull analyses/new curves.csv")
 
 #set the working directory
 setwd("R:/Ellen/WHOLE skull analyses/pts")
-
 
 #list which landmarks are fixed and will not slide
 
@@ -74,7 +73,7 @@ for(i in 1:length(pts_tibble_tmp))
 }
 
 
-
+
 ##############################################################
 ####making all the curves have the correct number of landmarks
 ##############################################################
@@ -98,11 +97,38 @@ for (which.curve in 1:nrow(curvedata)){
     orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
     orig.curve <- rbind(orig.curve.anchors[1,],orig.curve,orig.curve.anchors[2,])
     new.curve <- cursub.interpo(orig.curve, curvedata$ptswanted[which.curve])
+    #this bit checks if you had ANY 9999s in this curve before subsampling.
+    if(9999 %in% (orig.curve %>% pull(X))){ 
+      #If TRUE, fill those values back in with 9999, just in case the code accidentilly subsampled a missing curve, making nonsense variables
+      new.curve[c(2:dim(new.curve)[1]-1),]<-9999
+    }
     this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
   }
   newpts <- abind::abind(newpts, this.curve, along=1)
 }
 
+#which.curve
+
+#class(as.integer(sprintf('%0.3d', 1:480)))
+#class(which.curve)
+
+#which.curve2=sprintf('%0.3d', 1:480)
+#which.curve2[1]
+
+### trial for one spec one curve- can ignore ### 
+#which.curve=2
+#this.curve <- array(data=NA, dim=c(curvedata$ptswanted[which.curve],3,ntaxa))
+
+#which.spec=1
+
+#orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
+#orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
+#orig.curve <- rbind(orig.curve.anchors[1,],orig.curve,orig.curve.anchors[2,])
+#new.curve <- cursub.interpo(orig.curve, curvedata$ptswanted[which.curve])
+#this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
+#newpts <- abind::abind(newpts, this.curve, along=1)
+
+
 
 
 #########################################
@@ -132,10 +158,10 @@ check_curves <- function(tibble1){
 
 #which.curve
 
-
+
 #class(as.integer(sprintf('%0.3d', 1:480)))
 #class(which.curve)
-
+
 #which.curve2=sprintf('%0.3d', 1:480)
 #which.curve2[1]
 
@@ -153,16 +179,20 @@ subsampled.lm[which(subsampled.lm==9999)]<-NA
 subsampled.lm[which(is.nan(subsampled.lm))]<-NA
 subsampled.lm[which(subsampled.lm==-Inf)]<-NA
 
-estimate.missing(subsampled.lm,method="TPS")
+geomorph::estimate.missing(subsampled.lm,method="TPS")
 
 subsampled.lm2<-abind(subsampled.lm[,,2],subsampled.lm)
 newnewpts<-estimate.missing(subsampled.lm2)
-                         
-#Remove the extra specimen added by subsampled 
-pts187 <- newnewpts[,,-c(1)]                
 
-spheres3d(pts187[,,110], radius = 2)
-
+#Remove the extra specimen added by subsampled 
+ptsbatch <- newnewpts[,,-c(1)]
+
+spheres3d(ptsbatch[,,4], radius = 2)
+
+
+save(ptsbatch, file="F:/PTS FINAL LHS/ptsbatch.R")
+
+
 #orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
 #orig.curve.anchors <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%slice(c(subsampled.curve[[which.curve]][1],last(subsampled.curve[[which.curve]]))) %>% select(., X,Y,Z)
 #orig.curve <- rbind(orig.curve.anchors[1,],orig.curve,orig.curve.anchors[2,])
@@ -170,7 +200,18 @@ spheres3d(pts187[,,110], radius = 2)
 #this.curve[,,which.spec] <- as.matrix(new.curve)[2:(dim(new.curve)[1]-1),]
 #newpts <- abind::abind(newpts, this.curve, along=1)
 
-                         
+
+#This is for checking the lengths of files to see if they are the same 
+files <- list.files( path = "R:/Ellen/WHOLE skull analyses/pts/pts", pattern = ".pts" )
+
+for ( i in seq(1:length(files)) ){
+  cat( "Lines for file ", files[i], "are: ", "\n" )
+  cat( length(readLines( paste( files[i], sep = "" )) ), "\n" )
+}
+
+
+
+
 #Checking what goes wrong 
 #Load single pts 
 file=as.matrix(read.table(file="F:/PTS FINAL LHS/missing data test/Agorophiid USNM 205491.pts",skip=2,header=F,sep="",row.names=1))
@@ -180,5 +221,4 @@ text3d(ptsbatch1[c(1:123),,2], text=1:123)
 subsampled.lm[,,2] # should have NAs for missing data 
 #This is how it looks after estimate.missing 
 ptsbatch1[,,2]
-                         
-                         
+
