@@ -126,8 +126,9 @@ spheres3d(data[,,1], color=col, radius = 0.001)
 
 spheres3d(newarray[,,1], color=col, radius = 1)
               
-              
-              
+#How does the morphospace look? Exactly like with landmarks only 
+#Play around with colours/groups later (i.e., add species data) 
+PCA=plotTangentSpace(shapedata, axis1=1, axis2=2)
               
               
               
