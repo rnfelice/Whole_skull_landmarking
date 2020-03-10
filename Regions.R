@@ -383,3 +383,5 @@ squa_disp=morphol.disparity(shapedata[squa,,]~1)/length(squa)
 zygo_disp=morphol.disparity(shapedata[zygo,,]~1)/length(zygo)
 pal_disp=morphol.disparity(shapedata[pal,,]~1)/length(pal)
 jug_disp=morphol.disparity(shapedata[jug,,]~1)/length(jug)
+
+save(B_15, file="F:/PTS FINAL LHS/B_15.R")
