@@ -354,3 +354,32 @@ PS_disp=morphol.disparity(Y.gpa.rhs_173[PS,,]~1)/length(PS)
 Sq_disp=morphol.disparity(Y.gpa.rhs_173[Sq,,]~1)/length(Sq)
 
 
+
+library(geomorph)
+
+#Increase your R memory 
+#memory.size() reports the current or maximum memory allocation of the malloc function used in this version of R.
+#memory.limit() reports or increases the limit in force on the total allocation.
+# eg. memory.limit(size = 4000000) 
+
+
+#Need shapedata + SVP tree 
+bones15 <- regionsLHS$bone
+B_15=compare.multi.evol.rates(A=shapedata, phy=treeSVP, gp=bones15)
+
+#Bone by bone (no ecology data)
+nas_disp=morphol.disparity(shapedata[nas,,]~1)/length(nas)
+premax_disp=morphol.disparity(shapedata[premax,,]~1)/length(premax)
+max_disp=morphol.disparity(shapedata[max,,]~1)/length(max)
+frontal_disp=morphol.disparity(shapedata[frontal,,]~1)/length(frontal)
+pteryg_disp=morphol.disparity(shapedata[pteryg,,]~1)/length(pteryg)
+supocc_disp=morphol.disparity(shapedata[supocc,,]~1)/length(supocc)
+basiocc_disp=morphol.disparity(shapedata[basiocc,,]~1)/length(basiocc)
+basisphen_disp=morphol.disparity(shapedata[basisphen,,]~1)/length(basisphen)
+mandp_disp=morphol.disparity(shapedata[mandp,,]~1)/length(mandp)
+occipcon_disp=morphol.disparity(shapedata[occipcon,,]~1)/length(occipcon)
+parietal_disp=morphol.disparity(shapedata[parietal,,]~1)/length(parietal)
+squa_disp=morphol.disparity(shapedata[squa,,]~1)/length(squa)
+zygo_disp=morphol.disparity(shapedata[zygo,,]~1)/length(zygo)
+pal_disp=morphol.disparity(shapedata[pal,,]~1)/length(pal)
+jug_disp=morphol.disparity(shapedata[jug,,]~1)/length(jug)
