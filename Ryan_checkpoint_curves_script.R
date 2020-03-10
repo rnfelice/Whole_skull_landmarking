@@ -189,7 +189,10 @@ ptsbatch <- newnewpts[,,-c(1)]
 
 spheres3d(ptsbatch[,,156], radius = 2)
 
-
+#ptsbatch without RHS 
+ptsbatchLHS <- ptsbatch[-c(67:123),,]                         
+save(ptsbatchLHS, file="F:/PTS FINAL LHS/ptsbatchLHS.R")
+                                               
 save(ptsbatch, file="F:/PTS FINAL LHS/ptsbatch.R")
 
 
