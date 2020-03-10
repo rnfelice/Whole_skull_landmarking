@@ -348,7 +348,9 @@ write.table(zygo_var*1000,
 
 
 
-
-
+#Comparing regions - this doesn't have ecological data yet 
+C_19=compare.multi.evol.rates(A=Y.gpa.rhs_172, phy=tree_172, gp=M19)
+PS_disp=morphol.disparity(Y.gpa.rhs_173[PS,,]~1)/length(PS)
+Sq_disp=morphol.disparity(Y.gpa.rhs_173[Sq,,]~1)/length(Sq)
 
 
