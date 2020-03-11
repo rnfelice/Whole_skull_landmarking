@@ -1,5 +1,6 @@
 
-
+#Make sure your tree and your data names are in the same order: 
+shapedata <- shapedata[,,treeSVP$tip.label]
 
 #designate the regions 
 region.names=c("nasal","premax","maxilla","jugal","frontal","parietal","zygomatic","squamosal","mandibular process","supraoccipital",
