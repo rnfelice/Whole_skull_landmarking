@@ -385,3 +385,4 @@ pal_disp=morphol.disparity(shapedata[pal,,]~1)/length(pal)
 jug_disp=morphol.disparity(shapedata[jug,,]~1)/length(jug)
 
 save(B_15, file="F:/PTS FINAL LHS/B_15.R")
+PCA=plotTangentSpace(shapedata, label= species_data$species, axis1=1, axis2=2) 
