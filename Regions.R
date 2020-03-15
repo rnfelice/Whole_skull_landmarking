@@ -41,10 +41,10 @@ text3d(shapedata[premax,,42], text=premax)
 
 
 #pull out the modules 
-max <- which(regionsLHS$bone=="maxilla")
+maxilla <- which(regionsLHS$bone=="maxilla")
 #plot them to check 
-spheres3d(shapedata[max,,42], radius =  0.0002)
-text3d(shapedata[max,,42], text=max)
+spheres3d(shapedata[maxilla,,42], radius =  0.0002)
+text3d(shapedata[maxilla,,42], text=maxilla)
 
 
 #pull out the modules 
@@ -131,7 +131,7 @@ text3d(shapedata[zygo,,2], text=squa)
 #check
 spheres3d(shapedata[nas,,42], radius = 0.0002, color = "red")
 spheres3d(shapedata[premax,,42], radius =  0.0002, color = "darkblue")
-spheres3d(shapedata[max,,42], radius =  0.0002, color = "lightgreen")
+spheres3d(shapedata[maxilla,,42], radius =  0.0002, color = "lightgreen")
 spheres3d(shapedata[frontal,,42], radius =  0.0002, color = "pink")
 spheres3d(shapedata[pteryg,,42], radius =  0.0002, color = "purple")
 spheres3d(shapedata[pal,,42], radius =  0.0002, color = "yellow")
@@ -151,7 +151,7 @@ nas_data=shapedata[nas,,]
 #check 
 #spheres3d(shapedata[squa,,40], radius = 0.0002, color = "red")
 premax_data=shapedata[premax,,]
-max_data=shapedata[max,,]
+max_data=shapedata[maxilla,,]
 frontal_data=shapedata[frontal,,]
 pteryg_data=shapedata[pteryg,,]
 pal_data=shapedata[pal,,]
@@ -370,7 +370,7 @@ B_15=compare.multi.evol.rates(A=shapedata, phy=treeSVP, gp=bones15)
 #Bone by bone (no ecology data)
 nas_disp=morphol.disparity(shapedata[nas,,]~1)/length(nas)
 premax_disp=morphol.disparity(shapedata[premax,,]~1)/length(premax)
-max_disp=morphol.disparity(shapedata[max,,]~1)/length(max)
+max_disp=morphol.disparity(shapedata[maxilla,,]~1)/length(max)
 frontal_disp=morphol.disparity(shapedata[frontal,,]~1)/length(frontal)
 pteryg_disp=morphol.disparity(shapedata[pteryg,,]~1)/length(pteryg)
 supocc_disp=morphol.disparity(shapedata[supocc,,]~1)/length(supocc)
