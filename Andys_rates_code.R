@@ -18,3 +18,9 @@ log.rate.land <- log( rate.land )
 rateCol.land <- col.rate( 30 )[as.numeric( cut( log.rate.land, breaks = 30 ) )]
 # 5. Check output by plotting points as per-point variance
 plot( log.rate.land, col = rateCol.land, cex = 2, pch = 19 )
+
+# 6. Create 3d plot of per-landmark variance, based on single reference specimen
+plot3d( comb.dataset$mean[1:889,,10], col = rateCol.land, type = "s",
+        radius = 0.01, aspect = T, main = "mean", axes = F, main = F , fov = 0 )
+# 9. Plot mesh under coloured landmark points
+shade3d( template.mesh, col = "white" )
