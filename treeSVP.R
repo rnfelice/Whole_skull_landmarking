@@ -24,3 +24,10 @@ name.check(treeSVP, two.d.array(shapedata)) ## check the same
 #Should run 'character 0' or 'OK' 
 
 #drop.tip - drop tip
+
+#double check the trees and shape data 
+shapedata <- shapedata[,,treeSVP$tip.label]
+View(cbind(dimnames(shapedata)[[3]], treeSVP$tip.label))
+
+
+
