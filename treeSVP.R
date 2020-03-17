@@ -30,4 +30,12 @@ shapedata <- shapedata[,,treeSVP$tip.label]
 View(cbind(dimnames(shapedata)[[3]], treeSVP$tip.label))
 
 
+#save tree 
+write.nexus(treeSVP, file = "treeSVP.nexus")
+
+
+
+
+
+
 
