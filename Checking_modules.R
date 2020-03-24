@@ -7,7 +7,7 @@
 #create the colour pal
 cbbPalette=c("palegreen", "#D55E00", "#6A3D9A", "#0072B2", "#A6CEE3", "#000000",
              "#E69F00", "#696969", "#009E73", "#CC79A7", "#00EEEE", "limegreen", "#FF1493", "#F0E442")
-modulecolors1<-as.factor(regionsLHSbone)
+modulecolors1<-as.factor(regionsLHS$bone)
 levels(modulecolors1)<-cbbPalette
 
 #Asign bones to colours 
