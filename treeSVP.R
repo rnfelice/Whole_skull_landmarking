@@ -18,7 +18,7 @@ dimnames(shapedata)[[3]]<-Full_names_phylo #adds the phylo names to the data
 tmp <- name.check(tree, two.d.array(shapedata)) ## (Y.gpa is your 3D array of landmark data)
 tmp
 treeSVP <- drop.tip(tree, tip=tmp$tree_not_data)  ## drop species in tree but NOT from data
-#subtree is now the tree I use for procD.pgls 
+#This is now the tree I use for procD.pgls 
 treeSVP$tip.label #shows you which tips you have 
 name.check(treeSVP, two.d.array(shapedata)) ## check the same
 #Should run 'character 0' or 'OK' 
