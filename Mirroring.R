@@ -14,7 +14,7 @@ library(paleomorph)
 #None of the lms are mirrored - just the curve data 
 
 ################################### SWAP REAL LHS LMS FOR MIRRORED ONES FOR PROCRUSTES
-ActualLMs=ptsbatch[1:123,,] ## 53 landmarks, but 3 of these are midline, so total LMs will be 53+50
+ActualLMs=ptsbatch[1:123,,] ## 57 landmarks o each side + 9 on the midline 
 ActualLMsmatrix=as.matrix(ActualLMs)
 midline<-as.integer(c(38,40,48,49,51,54,55,56,61))
 left.lm <- c(1:37,39,41:47,50,52,53,57:60,62:66)
