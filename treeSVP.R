@@ -5,6 +5,10 @@ library(phytools)
 
 #Read in specimen data (if not already done above)
 
+#NOTE - if the below code doesn't work do this:  name.check(treeSLATER, treeSLATER$tip.label, data.names=Full_names_phylo)
+
+
+
 species_data <- read.csv('Species_data_asymmetry.csv')
 #Read asymmetry tree in 
 
@@ -32,7 +36,6 @@ View(cbind(dimnames(shapedata)[[3]], treeSVP$tip.label))
 
 #save tree 
 write.nexus(treeSVP, file = "treeSVP.nexus")
-
 
 
 
