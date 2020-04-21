@@ -194,6 +194,7 @@ ptsbatchLHS <- ptsbatch[-c(67:123),,]
 save(ptsbatchLHS, file="F:/PTS FINAL LHS/ptsbatchLHS.R")
                                                
 save(ptsbatch, file="F:/PTS FINAL LHS/ptsbatch.R")
+load('ptsbatch.R')
 
 
 #orig.curve <- pts_tibble %>% filter(.,spec.id==filenames[which.spec])%>%filter(., class=="C")%>%filter(., id==which.curve) %>% select(., X,Y,Z)
