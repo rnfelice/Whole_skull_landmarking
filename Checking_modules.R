@@ -15,6 +15,7 @@ modulecolors1<-as.factor(regionsLHS$bone)
 levels(modulecolors1)<-cbbPalette
 
 #Check each one in turn 
+#Begin = is the number you want to begin at 
 check.modules(shapedata,pt.size=.0003,module.colors = modulecolors1,begin=1)
 
 
