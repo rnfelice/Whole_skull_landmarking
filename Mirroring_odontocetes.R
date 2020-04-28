@@ -2,6 +2,12 @@
 #Mirroring in the odontocetes 
 #Dealing with asymmetry
 
+#normal specimen landmarks = 1:123
+#normal specimen curves = 1:64 (lines 124:1083)
+#asymmetric specimens landmarks = 1:123 
+#asymmetric spcimens curves = 1:85 (lines 1084:1408)
+
+
 load(ptsbatch.R) #Just 4 specimens to play with. Used estimate.missing on one of them to test it works ok
 curvedata <- read.csv('regions_odontocete.csv') #this is what I used to number the curves e.g. for mirroring and for the midline etc 
 
@@ -12,7 +18,7 @@ midline.curves <- ptsbatch[c(629:648,764:783,824:838,884:903),,]
 #Extra landmarks placed on the RHS of odontocetes 
 lmextra <- as.integer(c(67:79,83:86,120:123)) 
 #Extra curves placed on the RHS of odontocetes 
-curveextra <- ptsbatch[c(1084:1408),,]
+curveextra <- ptsbatch[c(1084:1408),,] #1084 is curve #65 
 
 #Remove corresponding LHS landmarks and curves 
 corressLHS <- as.integer(c(1:15,19:24)) #LMs
