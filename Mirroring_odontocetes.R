@@ -48,8 +48,8 @@ lm_to_mirror <- ptsbatch[-c(1:15,19:24,67:79,83:86,120:123,124:1408,38,40,48,49,
 curves_to_mirror <- ptsbatch[-c(1:123, 124:448,1084:1408,629:648,764:783,824:838,884:903),,] 
 
 #check this is correct 
-spheres3d(lm_to_mirror[,,3],radius=2, color ='blue')
-spheres3d(curves_to_mirror[,,3],radius=2, color ='blue')
+spheres3d(lm_to_mirror[,,3],radius=2, color ='blue') #the face and midline line points have been removed 
+spheres3d(curves_to_mirror[,,3],radius=2, color ='blue') #the face and midline have been removed 
 
 
 #bind the landmarks and curves that we want to mirror 
