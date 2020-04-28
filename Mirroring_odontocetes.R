@@ -25,20 +25,18 @@ lmextra <- ptsbatch[c(67:79,83:86,120:123),,]
 curveextra <- ptsbatch[c(1084:1408),,] #1084 is curve #65 
 
 #Remove corresponding LHS landmarks and curves 
-corressLHS <- ptsbatch[c(1:15,19:24),,] #LMs -16-18 are the jugal which I'm ignoring
+corressLHS <- ptsbatch[c(1:15,19:24),,] #LMs 16-18 are the jugal which I'm ignoring
 corresscurves <- ptsbatch[c(124:448),,] #curves #i.e. curve 1-21 (inlcusive) 
-                             
+
 #check the midline 
 spheres3d(midline.lm[,,3],radius=2, color = 'red') 
 #check the midline 
 spheres3d(midline.curves[,,3], radius = 2, color = 'red') 
-#check the additional RHS landmarks
-spheres3d(lmextra[,,3],radius=2) 
-#check the additional RHS curves 
-spheres3d(curveextra[,,3],radius=2) 
-
-#Check corressponding landmarks and curves on LHS (original) 
-spheres3d(corressLHS[,,3],radius=2, color ='green')
+#check the additional RHS landmarks and RHS curves
+##Check corressponding landmarks and curves on LHS (original) 
+spheres3d(lmextra[,,3],radius=2, color = 'red') 
+spheres3d(curveextra[,,3],radius=2, color = 'black') 
+spheres3d(corressLHS[,,3],radius=2, color ='red')
 spheres3d(corresscurves[,,3],radius=2, color = 'green') 
 
 #Not sure why I couldn't get 'corressLHS' to work so I just put in the LM numbers again...
@@ -49,7 +47,7 @@ lm_to_mirror <- ptsbatch[-c(1:15,19:24,67:123,83:86,120:123,124:1408,38,40,48,49
 curves_to_mirror <- ptsbatch[-c(1:123, 124:448,1084:1408,629:648,764:783,824:838,884:903),,] 
 
 #check this is correct 
-spheres3d(lm_to_mirror[,,3],radius=2, color ='blue') #the face and midline line points have been removed 
+spheres3d(lm_to_mirror[,,3],radius=2, color ='red') #the face and midline line points have been removed 
 spheres3d(curves_to_mirror[,,3],radius=2, color ='blue') #the face and midline have been removed 
 
 
@@ -59,6 +57,25 @@ to_mirror <- abind(lm_to_mirror, curves_to_mirror, along = 1)
 
 #check this looks right 
 spheres3d(to_mirror[,,3],radius=2, color ='blue')
-spheres3d(ptsbatch[midline.lm,,3],radius=2, color = 'red') #check the midline 
+spheres3d(midline.lm[,,3],radius=2, color = 'yellow') #check the midline 
 spheres3d(midline.curves[,,3], radius = 2, color = 'red') 
 
+
+#bind midline curves and landmarks 
+midline <- abind(midline.lm, midline.curves, along = 1)
+#double check 
+spheres3d(midline[,,3],radius=2, color = 'yellow') 
+
+
+#CHECK IT ALL - PLOT TOGETHER 
+#red = the extra asymmetric data 
+#blue = landmarks/curves to mirror
+#green = boring corresponding landmarks (to the asymmetric ones) 
+#yellow = midline 
+
+spheres3d(lmextra[,,3],radius=2, color = 'red') 
+spheres3d(curveextra[,,3],radius=2, color  = 'red') 
+spheres3d(to_mirror[,,3],radius=2, color ='blue')
+spheres3d(corressLHS[,,3],radius=2, color ='green')
+spheres3d(corresscurves[,,3],radius=2, color = 'green') 
+spheres3d(midline[,,3],radius=2, color = 'yellow') 
