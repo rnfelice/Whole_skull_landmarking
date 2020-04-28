@@ -68,9 +68,9 @@ spheres3d(midline[,,3],radius=2, color = 'yellow')
 
 
 #CHECK IT ALL - PLOT TOGETHER 
-#red = the extra asymmetric data 
-#blue = landmarks/curves to mirror
-#green = boring corresponding landmarks (to the asymmetric ones) 
+#red = the extra asymmetric data on odonts
+#blue = landmarks/curves to mirror across
+#green = corresponding curves/landmarks (to the asymmetric ones) 
 #yellow = midline 
 
 spheres3d(lmextra[,,3],radius=2, color = 'red') 
