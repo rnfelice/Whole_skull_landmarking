@@ -13,7 +13,6 @@ library(abind)
 #RHS = asymmetric 
 
 ptsbatch <- load('ptsbatch.R') #Just 4 specimens to play with. Used estimate.missing on one of them to test it works ok
-curvedata <- read.csv('regions_odontocete.csv') #this is what I used to number the curves e.g. for mirroring and for the midline etc 
 
 #midline landmarks 
 midline.lm<-ptsbatch[c(38,40,48,49,51,54,55,56,61),,] 
