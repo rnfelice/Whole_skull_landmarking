@@ -10,6 +10,10 @@ library(qgraph)
 library(ape)
 library(geiger)
 library(abind)
+library(tibble)
+library(dplyr)
+library(tidyr)
+
 #load the script for resampling functions
 source("R:/Ellen/WHOLE skull analyses/pts/resamplingsV3.R")
 
