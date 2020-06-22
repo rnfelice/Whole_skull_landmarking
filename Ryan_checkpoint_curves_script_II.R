@@ -152,61 +152,52 @@ spheres3d(patched_all[,,1],col=module_colors,radius=.5)
 rgl.snapshot("./Figures/acinonyx_modules.png")
 
 
+#Creating 'missing' landmarks to be able to slide
+misslist<-createMissingList(dim(newpts)[3])
+for (j in 1:dim(newpts)[[3]]){
+  misslist[[j]]<-which(is.na(newpts[,1,j]))
+} 
+ newpts2<-fixLMtps(newpts)
+ {
+   slided4.all <- slider3d(newpts2$out, SMvector= SMvector1,
+                                     outlines = outlines1, surp =surp1,
+                                     sur.path = "./ply", sur.name = NULL, 
+                                     meshlist = paste("./ply/",dimnames(all.specs3$out)[[3]],".ply",sep=""), ignore = NULL,
+                                     sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
+                                     recursive = TRUE, iterations = 3, initproc = TRUE,
+                                     pairedLM = 0, mc.cores = 1, bending=TRUE,
+                                     fixRepro = FALSE,stepsize=0.2,
+                           missingList=misslist)
+   dimnames(slided4.all[["dataslide"]])[3]<-dimnames(newpts2$out)[3]
+   #save(slided4.all,file="~/Google Drive/NHM/crocs/data/slid.crocs.all.apr25.R")
+   #load("~/Google Drive/NHM/crocs/data/slid.crocs.sept23.R")
+ }
 
-#make a list of all the fixed and curve points that belong to nasal
-lm_nasal <- my_curves$Curves[which(curve_table$Module=="nasal")]%>%unlist(.)%>%unique(.)%>%sort(.)
-#get a list of which the belong to the nasal
-patch_nasal <- which(patch_modules$module=="nasal")
-#select only the nasal points 
-data_nasal <- newpts[lm_nasal,,]
 
+#########################################################
+#                                                       #
+#                 SLIDING LANDMARKS                     #
+#                                                       #
+# #######################################################                                                 
 
-#check how many have missing data
-data_nasal %>% two.d.array(.) %>% is.na(.) %>% which(.)
-
-
-#remove specimens with missing data
-data_nasal2 <- data_nasal %>% two.d.array(.) %>% as.data.frame(.) %>% na.omit(.) %>% arrayspecs(., p=dim(data_nasal)[1], k=3)
-#make a nsasl only atlas
-atlas_nasal <- createAtlas(mesh = atlas$mesh, 
-                           landmarks = as.matrix(atlas$landmarks[lm_nasal,]),
-                           patch = as.matrix(patch[patch_nasal,]),
-                           corrCurves=ReCorrCurves(curve.in = my_curves$Curve.in,
-                                                   curvein.nos = which(curve_table$Module=="nasal"), 
-                                                   rec1 = curve_table$ptswanted,
-                                                   n.fixed = length(lm_nasal[lm_nasal<=length(my_curves$Fixed)])), 
-                           patchCurves = NULL,
-                           keep.fix=1:length(lm_nasal[lm_nasal<=length(my_curves$Fixed)]))
-
-patched_nasal <- placePatch(atlas_nasal,
-                            data_nasal2,
-                            path="./Raw_Data/ply/",
-                            prefix=NULL,
-                            fileext=".ply",
-                            ray=TRUE,
-                            inflate=2,
-                            tol=.8,
-                            relax.patch=FALSE,
-                            #relax.patch=TRUE,
-                            keep.fix=1:length(lm_nasal[lm_nasal<=length(my_curves$Fixed)]),
-                                                      #rhotol=NULL,
-                                                      silent=FALSE, mc.cores=3)
+slided4.all <- slider3d(newpts2$out, SMvector= my_curves$Sliding.LMs,
+                                     outlines = my_curves$Curve, sur.path = "./ply", sur.name = NULL, 
+                                     meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
+                                     sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
+                                     recursive = TRUE, iterations = 3, initproc = TRUE,
+                                     pairedLM = 0, mc.cores = 1, bending=TRUE,
+                                     fixRepro = FALSE,stepsize=0.2,
+                           missingList=misslist)
 
 
 
+#re-estimate missing post sliding
+slided4.all$dataslide[which(is.na(newpts))]<-NA
+slid.lms<-fixLMtps(slided4.all$dataslide)
 
 
-checkLM(patched_nasal,begin=1,atlas = atlas_nasal,
-        path = "./Raw_Data/ply/", suffix = ".ply",render="s", pt.size=.5)
-
-#checked to 20
-
-save(patched_nasal, file="./Data/patched_nasal_all.R")
-
-
-
-
-
+#THEN MIRROR 
+#THEN PROCRUSTES
 
 
 
