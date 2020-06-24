@@ -181,7 +181,7 @@ for (j in 1:dim(newpts)[[3]]){
 # #######################################################                                                 
 
 slided4.all <- slider3d(newpts2$out, SMvector= my_curves$Sliding.LMs,
-                                     outlines = my_curves$Curve, sur.path = "./ply", sur.name = NULL, 
+                                     outlines = my_curves$Curves, sur.path = "./ply", sur.name = NULL, 
                                      meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
                                      sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
                                      recursive = TRUE, iterations = 3, initproc = TRUE,
