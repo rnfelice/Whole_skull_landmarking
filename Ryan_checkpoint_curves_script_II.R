@@ -15,7 +15,6 @@ library("devtools")
 devtools::install_github("rnfelice/SURGE")
 
 install.packages("remotes")
-remotes::install_github("rnfelice/SURGE")
 
 library(SURGE)
 library(RColorBrewer) # for color palettes
@@ -29,12 +28,12 @@ source("./checkLM.mod.R")
 curve_table <- read_csv('new curves_44_61.csv')
 
 #identify the folder where your pts files are, INCLUDING TEMPLATE
-ptsfolder <- "./Raw_Data/pts"
+ptsfolder <- "D:/PTS WHOLE SKULL/Archs"
 
 #import the pts file names
 ptslist <- dir(ptsfolder, pattern='.pts', recursive=F)
 
-my_curves <- create_curve_info(curve_table, n_fixed = 66)
+my_curves <- create_curve_info(curve_table, n_fixed = 123)
 setwd(ptsfolder)
 subsampled.lm <- import_chkpt_data(ptslist, my_curves, subsampl = TRUE, verbose=TRUE)
 
