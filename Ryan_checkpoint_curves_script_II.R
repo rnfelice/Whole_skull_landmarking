@@ -13,19 +13,20 @@ library(geiger)
 library(abind)
 library("devtools")
 devtools::install_github("rnfelice/SURGE")
+
+install.packages("remotes")
+remotes::install_github("rnfelice/SURGE")
+
 library(SURGE)
 library(RColorBrewer) # for color palettes
 library(magick)
 
 source("./checkLM.mod.R")
 
-#set path for ply files (if too big for github repository)
-#plypath <- "C:\\Users\\Anjali Goswami\\Dropbox\\Work\\Projects\\ERC\\Synmammals\\all_landmarked_placentals\\final\\ply\\"
-
-
+#Set path to PTS final LHS - this is where all of the curves excels etc are 
 
 #import table defining curves
-curve_table <- read_csv("./Raw_Data/placental_curves.csv")
+curve_table <- read_csv('new curves_44_61.csv')
 
 #identify the folder where your pts files are, INCLUDING TEMPLATE
 ptsfolder <- "./Raw_Data/pts"
