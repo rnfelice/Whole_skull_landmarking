@@ -14,7 +14,7 @@ setwd("G:/Checkpoint - ICVM/ICVM LHS RHS CURVES/ply binary")
 
 #set output folder
 #The extra forward slash at the end tells R that that is the output folder
-outputfolder<-("G:/Checkpoint - ICVM/ICVM LHS RHS CURVES/ply/")
+outputfolder<-("D:/Ply ASCII/ply ASCII/Archs/")
 
 meshlist<-dir(pattern='.ply',recursive=F)
 

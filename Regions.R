@@ -57,7 +57,7 @@ text3d(shapedata[frontal,,42], text=frontal)
 #pull out the modules 
 pteryg <- which(regionsLHS$bone=="pterygoid")
 #plot them to check 
-spheres3d(shapedata[pteryg,,42], radius =  0.0002)
+spheres3d(newpts[pteryg,,9], radius = 2)
 text3d(shapedata[pteryg,,42], text=pteryg)
 
 

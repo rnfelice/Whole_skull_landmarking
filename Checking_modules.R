@@ -2,7 +2,11 @@
 #This code creates a colour palette to map modules and check for outliers
 #Check.modules function 
 
-#RUN THE CHECK.MODULES FUNCTION FIRST 
+#RUN THE CHECK.MODULES FUNCTION FIRST (BELOW)
+
+#Add region bone data 
+
+regionsLHS <- read.csv('regionsLHS.csv')
 
 #create the colour pal
 cbbPalette=c("palegreen", "#D55E00", "#6A3D9A", "#0072B2", "#A6CEE3", "#000000",
@@ -16,7 +20,7 @@ levels(modulecolors1)<-cbbPalette
 
 #Check each one in turn 
 #Begin = is the number you want to begin at 
-check.modules(shapedata,pt.size=.0003,module.colors = modulecolors1,begin=1)
+check.modules(newpts,pt.size=2,module.colors = modulecolors1,begin=9)
 
 
 check.modules <- function(dat.array, path=NULL, prefix="", suffix=".ply", col="white", pt.size=NULL, alpha=1, begin=1, render=c("w","s"), point=c("s","p"), add=FALSE,meshlist=NULL, Rdata=FALSE, module.colors=NULL, text.lm=FALSE)

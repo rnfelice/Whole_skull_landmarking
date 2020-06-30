@@ -28,7 +28,7 @@ source("./checkLM.mod.R")
 curve_table <- read_csv('new curves_44_61.csv')
 
 #identify the folder where your pts files are, INCLUDING TEMPLATE
-ptsfolder <- "D:/PTS WHOLE SKULL/Archs"
+ptsfolder <- "D:/PTS WHOLE SKULL/Archs/pts"
 
 #import the pts file names
 ptslist <- dir(ptsfolder, pattern='.pts', recursive=F)
@@ -37,63 +37,29 @@ my_curves <- create_curve_info(curve_table, n_fixed = 123)
 setwd(ptsfolder)
 subsampled.lm <- import_chkpt_data(ptslist, my_curves, subsampl = TRUE, verbose=TRUE)
 
-#RESET WD TO PROJECT DIRECTORY
-setwd("C:\\Users\\Anjali Goswami\\Documents\\GitHub\\Eutheria")
 
 #if you have any missing points, Checkpoint will set them to x,y,z=9999
 #this makes for bad plots in checkLM, so switch them to NA
 subsampled.lm[subsampled.lm == 9999] <- NA
 
+
+#SET WORKING DIRECTORY TO ASCII PLY
 #check to make sure your curves look okay on each specimen
-checkLM(subsampled.lm,begin=1,pt.size = .2,path="./Raw_Data/ply/",suffix=".ply",render="s")
+checkLM(subsampled.lm,path="./ply/", pt.size = 2,suffix=".ply",render="s", begin = 1)
+
 
 #FILL MISSING DATA (do after patching, before sliding)
-#subsampled.lm.2 <- fixLMtps(subsampled.lm, comp = 3)
-#newpts <- subsampled.lm.2$out #this is the resulting landmark configuration
+subsampled.lm.2 <- fixLMtps(subsampled.lm, comp = 3)
+newpts <- subsampled.lm.2$out #this is the resulting landmark configuration
 
-# SEPARATION OF TEMPLATE AND SPECIMENS
-newpts <- subsampled.lm[,,-which(dimnames(subsampled.lm)[[3]]=="template")]
-template.lm <- subsampled.lm[,,which(dimnames(subsampled.lm)[[3]]=="template")]
+#remove the landmarks on the RHS
+newpts <- newpts[-c(67:123),,]     
 
-save(newpts, file="./Data/subsampled_data.R")
+save(newpts, file="Archs_newpts.R")
 #load("./Data/subsampled_data.R")
 
-
-
-##########Adding new or fixed specimens
-#import table defining curves
-curve_table <- read_csv("./Raw_Data/placental_curves.csv")
-
-#identify the folder where your pts files are, INCLUDING TEMPLATE
-ptsfolder <- "./Test/pts"
-
-#import the pts file names
-ptslist <- dir(ptsfolder, pattern='.pts', recursive=F)
-my_curves <- create_curve_info(curve_table, n_fixed = 66)
-setwd(ptsfolder)
-fixed.lm <- import_chkpt_data(ptslist, my_curves, subsampl = TRUE, verbose=TRUE)
-
-
-#RESET WD TO PROJECT DIRECTORY
-setwd("C:\\Users\\Anjali Goswami\\Documents\\GitHub\\Eutheria")
-
-#if you have any missing points, Checkpoint will set them to x,y,z=9999
-#this makes for bad plots in checkLM, so switch them to NA
-fixed.lm[fixed.lm == 9999] <- NA
-
-#check to make sure your curves look okay on each specimen
-checkLM(fixed.lm,begin=13,pt.size = 1,path="./Test/ply/",suffix=".ply",render="s")
-
-#replace bad specimens in newpts
-newpts[,,141]<- hyracodon.lm
-
-ictops.lm<-fixed.lm[,,8]
-newpts[,,144]<-ictops.lm
-
-
-
-#check LM again
-checkLM(newpts,atlas=atlas,begin=1,pt.size = .5,path="./Raw_Data/ply/",suffix=".ply",render="s")
+#check LM again - set wd to ply files folder 
+checkLM(newpts, path="./ply/", pt.size = 2,suffix=".ply",render="s", begin = 1)
 
 
 #OPTIONAL
@@ -110,7 +76,7 @@ levels(curvemodules)<- c("black", "#6a3d9a","dimgrey","#fb9a99",  "gold", "#009E
 
 
 #import the mesh of specimen 1 for visualizing
-mesh1<-vcgImport("./Raw_Data/ply/Acinonyx_jubatus.ply")
+mesh1<-vcgImport("D:/Ply ASCII/ply ASCII/Archs/ply/Aegytocetus tarfa MSNTUP I-15459.ply")
 
 #open a 3d window with two viewing frames
 open3d()
@@ -118,14 +84,14 @@ mfrow3d(nr=1,nc=2)
 
 #plot the landmarks and curves on the specimen
 shade3d(mesh1,col="white")
-spheres3d(newpts[my_curves$Fixed,,1],col="red")
-spheres3d(newpts[my_curves$Sliding.LMs,,1],col="gold")
+spheres3d(newpts[my_curves$Fixed,,1],col="red", radius = 3)
+spheres3d(newpts[my_curves$Sliding.LMs,,1],col="gold", radius = 3)
 
 
 #plot the landmarks and curves colored by module
 next3d()
 shade3d(mesh1,col="white")
-spheres3d(newpts[,,1],col=curvemodules)
+spheres3d(newpts[,,1],col=curvemodules, radius = 3)
 
 #export list of taxa 
 write.csv(as.matrix(dimnames(newpts)[[3]]),file="./Raw_Data/mytaxonomytable.csv",quote=FALSE)
