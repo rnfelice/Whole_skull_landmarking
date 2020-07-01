@@ -45,15 +45,65 @@ subsampled.lm[subsampled.lm == 9999] <- NA
 
 #SET WORKING DIRECTORY TO ASCII PLY
 #check to make sure your curves look okay on each specimen
-checkLM(subsampled.lm,path="./ply/", pt.size = 2,suffix=".ply",render="s", begin = 1)
+checkLM(subsampled.lm,path="./ply/", pt.size = 2,suffix=".ply",render="s", begin = 2)
+
+
+newpts <- subsampled.lm
+
+#Create missing list 
+
+misslist<-createMissingList(dim(newpts)[3])
+for (j in 1:dim(newpts)[[3]]){
+  misslist[[j]]<-which(is.na(newpts[,1,j]))
+} 
+newpts2<-fixLMtps(newpts)
+{
+  slided4.all <- slider3d(newpts2$out, SMvector= my_curves$Sliding.LMs,
+                          outlines = my_curves$Curve, sur.path = "./ply", sur.name = NULL, 
+                          meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
+                          sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
+                          recursive = TRUE, iterations = 3, initproc = TRUE,
+                          pairedLM = 0, mc.cores = 1, bending=TRUE,
+                          fixRepro = FALSE,stepsize=0.2,
+                          missingList=misslist)
+  dimnames(slided4.all[["dataslide"]])[3]<-dimnames(newpts2$out)[3]
+  #save(slided4.all,file="~/Google Drive/NHM/crocs/data/slid.crocs.all.apr25.R")
+  #load("~/Google Drive/NHM/crocs/data/slid.crocs.sept23.R")
+}
+
+#Then use fixLMtps 
+#The slide 
+#Then fix LMtps to better estimate dummy variables 
+#Then mirror 
+#Then Procrustes 
+#Then analyse 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #FILL MISSING DATA (do after patching, before sliding)
 subsampled.lm.2 <- fixLMtps(subsampled.lm, comp = 3)
 newpts <- subsampled.lm.2$out #this is the resulting landmark configuration
 
-#remove the landmarks on the RHS
-newpts <- newpts[-c(67:123),,]     
+
 
 save(newpts, file="Archs_newpts.R")
 #load("./Data/subsampled_data.R")
@@ -97,6 +147,9 @@ spheres3d(newpts[,,1],col=curvemodules, radius = 3)
 write.csv(as.matrix(dimnames(newpts)[[3]]),file="./Raw_Data/mytaxonomytable.csv",quote=FALSE)
 
 
+#remove the landmarks on the RHS
+newpts <- newpts[-c(67:123),,]     
+
 #change names to match names in trees
 taxonomy <- read.csv("xxxx")
 for (i in 1:nrow(taxonomy)){
@@ -119,41 +172,46 @@ rgl.snapshot("./Figures/acinonyx_modules.png")
 
 
 #Creating 'missing' landmarks to be able to slide
+
+
 misslist<-createMissingList(dim(newpts)[3])
 for (j in 1:dim(newpts)[[3]]){
   misslist[[j]]<-which(is.na(newpts[,1,j]))
 } 
- newpts2<-fixLMtps(newpts)
- {
-   slided4.all <- slider3d(newpts2$out, SMvector= SMvector1,
-                                     outlines = outlines1, surp =surp1,
-                                     sur.path = "./ply", sur.name = NULL, 
-                                     meshlist = paste("./ply/",dimnames(all.specs3$out)[[3]],".ply",sep=""), ignore = NULL,
-                                     sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
-                                     recursive = TRUE, iterations = 3, initproc = TRUE,
-                                     pairedLM = 0, mc.cores = 1, bending=TRUE,
-                                     fixRepro = FALSE,stepsize=0.2,
-                           missingList=misslist)
-   dimnames(slided4.all[["dataslide"]])[3]<-dimnames(newpts2$out)[3]
-   #save(slided4.all,file="~/Google Drive/NHM/crocs/data/slid.crocs.all.apr25.R")
-   #load("~/Google Drive/NHM/crocs/data/slid.crocs.sept23.R")
- }
+
+newpts2<-fixLMtps(newpts)
+
+{
+  slided4.all <- slider3d(newpts2$out, SMvector= my_curves$Sliding.LMs,
+                          outlines = my_curves$Curve, sur.path = "./ply", sur.name = NULL, 
+                          meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
+                          sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
+                          recursive = TRUE, iterations = 3, initproc = TRUE,
+                          pairedLM = 0, mc.cores = 1, bending=TRUE,
+                          fixRepro = FALSE,stepsize=0.2,
+                          missingList=misslist)
+}
 
 
-#########################################################
-#                                                       #
-#                 SLIDING LANDMARKS                     #
-#                                                       #
-# #######################################################                                                 
+
+
 
 slided4.all <- slider3d(newpts2$out, SMvector= my_curves$Sliding.LMs,
-                                     outlines = my_curves$Curves, sur.path = "./ply", sur.name = NULL, 
-                                     meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
-                                     sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
-                                     recursive = TRUE, iterations = 3, initproc = TRUE,
-                                     pairedLM = 0, mc.cores = 1, bending=TRUE,
-                                     fixRepro = FALSE,stepsize=0.2,
-                           missingList=misslist)
+                        outlines = my_curves$Curve, sur.path = "./ply", sur.name = NULL, 
+                        meshlist = paste("./ply/",dimnames(newpts2$out)[[3]],".ply",sep=""), ignore = NULL,
+                        sur.type = "ply", tol = 1e-10, deselect = FALSE, inc.check = FALSE,
+                        recursive = TRUE, iterations = 3, initproc = TRUE,
+                        pairedLM = 0, mc.cores = 1, bending=TRUE,
+                        fixRepro = FALSE,stepsize=0.2,
+                        missingList=misslist)
+
+
+
+
+
+
+
+
 
 
 
@@ -162,9 +220,11 @@ slided4.all$dataslide[which(is.na(newpts))]<-NA
 slid.lms<-fixLMtps(slided4.all$dataslide)
 
 
+
+
 #THEN MIRROR 
 #THEN PROCRUSTES
 
 
 
-                            
+                      
